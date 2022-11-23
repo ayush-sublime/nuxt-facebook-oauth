@@ -8,25 +8,25 @@
       </span>
       <ul class="flex items-stretch">
         <NuxtLink to="/dashboard">
-          <li class="nav-item">
+          <li class="text-sm nav-item 3xl:text-xl">
             <i class="fas fa-chart-pie" />
             Dashboard
           </li>
         </NuxtLink>
         <NuxtLink to="/content-planner">
-          <li class="nav-item">
+          <li class="text-sm nav-item 3xl:text-xl">
             <i class="fas fa-calendar-check" />
             Content Planner
           </li>
         </NuxtLink>
         <NuxtLink to="/my-designs">
-          <li class="nav-item">
+          <li class="text-sm nav-item 3xl:text-xl">
             <i class="fas fa-brush" />
             My Designs
           </li>
         </NuxtLink>
         <NuxtLink to="/industry-news">
-          <li class="nav-item">
+          <li class="text-sm nav-item 3xl:text-xl">
             <i class="fas fa-bolt" />
             Industry News
           </li>
@@ -45,7 +45,7 @@
 
         <button
           type="button"
-          @click="() => (user ? signInWithFacebook() : signOut())"
+          @click="() => (isUserLoggedIn ? signInWithFacebook() : signOut())"
           class="flex items-center gap-3 p-2 rounded-md c-border"
         >
           <span
@@ -54,7 +54,7 @@
             <i v-if="!user" class="fas fa-user" />
             <img v-else :src="avatarUrl" alt="facebook-avatar-url" class="rounded-full" />
           </span>
-          {{ user ? userName : "Login" }}
+          {{ isUserLoggedIn ? userName : "Login" }}
           <i class="fas fa-chevron-down" />
         </button>
       </div>
@@ -65,21 +65,31 @@
 <script setup lang="ts">
 const client = useSupabaseClient();
 
-const myData = ref({});
+const isUserLoggedIn = reactive({
+  value: false as any,
+});
 
 async function signInWithFacebook() {
+  console.log("signing in with facebook");
   const { data, error } = await client.auth.signInWithOAuth({
     provider: "facebook",
   });
-  myData.value = data;
 }
 async function signOut() {
+  console.log("signing out");
   const { error } = await client.auth.signOut();
-  myData.value = {};
 }
 
 const user = useSupabaseUser();
-// user.value?.identities[0].identity_data.avatar_url
+
+watchEffect(() => {
+  if (user.value) {
+    isUserLoggedIn.value = true;
+  } else {
+    isUserLoggedIn.value = false;
+  }
+});
+
 const avatarUrl = computed(() => user.value?.user_metadata.avatar_url);
 const userName = computed(() => user.value?.user_metadata.name);
 </script>
@@ -96,6 +106,7 @@ const userName = computed(() => user.value?.user_metadata.name);
 .nav-item {
   @apply flex items-center gap-4 mr-8 text-gray-700 py-8;
   border-bottom: 4px solid transparent;
+  white-space: nowrap;
 }
 
 .nav-item:hover {

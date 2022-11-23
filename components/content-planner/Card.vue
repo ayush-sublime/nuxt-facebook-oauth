@@ -1,31 +1,18 @@
 <template>
-  <div
-    class="w-full font-medium rounded-xl"
-    :class="`${cardStyles.primary} ${cardStyles.secondary} ${
-      props.status === 'draft' ? 'border-dashed border-[3px]' : ''
-    }`"
-  >
+  <div class="w-full font-medium rounded-xl" :class="`${cardStyles.primary} ${cardStyles.secondary} ${props.status === 'draft' ? 'border-dashed border-[3px]' : ''
+  }`">
     <h5 class="px-6 py-3 text-lg text-inherit">{{ datetime }}</h5>
     <div class="relative" v-if="props.status !== 'draft'">
       <img
-        class="object-cover w-full origin-center h-52"
-        :src="props.image"
-        alt="card-image"
-      />
-      <input
-        v-if="props.status === 'needsApproval'"
-        type="checkbox"
-        class="absolute w-6 h-6 bg-white top-3 left-3"
-      />
+        class="flex items-center justify-center object-cover w-full text-4xl font-bold text-opacity-25 origin-center h-52"
+        :class="cardStyles.primary" :src="props.image" alt="card-image" />
+      <input v-if="props.status === 'needsApproval'" type="checkbox" class="absolute w-6 h-6 bg-white top-3 left-3" />
     </div>
     <div v-else class="grid h-52 place-items-center">
       <button class="fancybutton">Select Post</button>
     </div>
 
-    <span
-      v-if="props.status !== 'draft'"
-      class="flex items-center gap-3 px-4 py-3 font-semibold text-inherit"
-    >
+    <span v-if="props.status !== 'draft'" class="flex items-center gap-3 px-4 py-3 font-semibold text-inherit">
       <i class="text-inherit" :class="cardStyles.icon" />
       {{ cardMessage }}
     </span>
@@ -101,8 +88,7 @@ const props = withDefaults(defineProps<ICardProps>(), {
   datetime: "July 8, 2021",
   status: "scheduled",
   icon: "fas fa-clock",
-  image:
-    "https://images.unsplash.com/photo-1669072257143-5592e0652644?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+  keyword: "",
 });
 
 const cardMessage = computed(() => MESSAGES[props.status]);
@@ -112,11 +98,9 @@ const cardStyles = computed(() => {
 const datetime = computed(() => {
   const time = new Date(props.datetime);
   const hours = time.getHours();
-  return `${MONTHS[time.getMonth()]} ${time.getDate()}, ${
-    hours > 12 ? hours - 12 : hours
-  }:${time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes()} ${
-    hours > 12 ? "PM" : "AM"
-  }`;
+  return `${MONTHS[time.getMonth()]} ${time.getDate()}, ${hours > 12 ? hours - 12 : hours
+    }:${time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes()} ${hours > 12 ? "PM" : "AM"
+    }`;
 });
 </script>
 
