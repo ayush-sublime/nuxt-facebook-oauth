@@ -45,7 +45,7 @@
 
         <button
           type="button"
-          @click="() => (isUserLoggedIn ? signInWithFacebook() : signOut())"
+          @click="() => (!user ? signInWithFacebook() : signOut())"
           class="flex items-center gap-3 p-2 rounded-md c-border"
         >
           <span
@@ -54,7 +54,7 @@
             <i v-if="!user" class="fas fa-user" />
             <img v-else :src="avatarUrl" alt="facebook-avatar-url" class="rounded-full" />
           </span>
-          {{ isUserLoggedIn ? userName : "Login" }}
+          {{ user ? userName : "Login" }}
           <i class="fas fa-chevron-down" />
         </button>
       </div>
