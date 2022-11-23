@@ -51,7 +51,7 @@ await useFetch("/api/unsplash", {
   method: "GET",
   cache: "no-cache",
 }).then((res) => {
-  Posts.data = JSON.parse(JSON.stringify(res.data.value.data)) as unknown as any[];
+  Posts.data = JSON.parse(JSON.stringify(res.data.value!.data)) as unknown as any[];
 });
 
 const user = useSupabaseUser();
