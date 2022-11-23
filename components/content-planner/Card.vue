@@ -9,8 +9,8 @@
     <div class="relative" v-if="props.status !== 'draft'">
       <img
         class="object-cover w-full origin-center h-52"
-        :src="unsplashImage.value"
-        alt=""
+        :src="props.image"
+        alt="card-image"
       />
       <input
         v-if="props.status === 'needsApproval'"
@@ -18,7 +18,7 @@
         class="absolute w-6 h-6 bg-white top-3 left-3"
       />
     </div>
-    <div v-else class="h-52 grid place-items-center">
+    <div v-else class="grid h-52 place-items-center">
       <button class="fancybutton">Select Post</button>
     </div>
 
@@ -102,7 +102,7 @@ const props = withDefaults(defineProps<ICardProps>(), {
   status: "scheduled",
   icon: "fas fa-clock",
   image:
-    "https://images.unsplash.com/photo-1669064217047-c07914abb614?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+    "https://images.unsplash.com/photo-1669072257143-5592e0652644?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
 });
 
 const cardMessage = computed(() => MESSAGES[props.status]);
@@ -117,19 +117,6 @@ const datetime = computed(() => {
   }:${time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes()} ${
     hours > 12 ? "PM" : "AM"
   }`;
-});
-const unsplashImage = reactive({
-  value: props.image,
-});
-
-onMounted(async () => {
-  const { data }: any = await useFetch(`/api/unsplash`, {
-    method: "POST",
-    body: {
-      keyword: props.keyword,
-    },
-  });
-  unsplashImage.value = data?.links.self;
 });
 </script>
 

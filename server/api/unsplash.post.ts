@@ -4,12 +4,11 @@ export default defineEventHandler(async (event) => {
   //use body
   const body = await readBody(event);
 
-  const data = await $fetch(
-    `${config.public.baseURL}/photos/search?query=${body.keyword}&client_id=${config.unsplash.APIKey}&count=1`,
+  const data: any = await $fetch(
+    `${config.public.baseURL}/search/photos?per_page=1&page=1&query=${body.keyword}&client_id=${config.unsplash.APIKey}`,
     {
       method: "GET",
     }
   );
-
-  return data;
+  return data.results[0].urls.small_s3;
 });

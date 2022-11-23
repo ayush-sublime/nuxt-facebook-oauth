@@ -3,7 +3,11 @@ module.exports = {
   jit: true,
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        "3xl": "1728px",
+      },
+    },
   },
   plugins: [require("daisyui")],
-}
+};
