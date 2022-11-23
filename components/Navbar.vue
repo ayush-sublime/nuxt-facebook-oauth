@@ -37,25 +37,19 @@
         <button class="relative">
           <i class="z-10 fa-solid fa-bell" />
           <span
-            class="absolute top-[8px] right-[-12px] bg-red-500 text-white text-xs w-5 h-5 font-bold rounded-full flex items-center justify-center"
-          >
+            class="absolute top-[8px] right-[-12px] bg-red-500 text-white text-xs w-5 h-5 font-bold rounded-full flex items-center justify-center">
             2
           </span>
         </button>
 
-        <button
-          type="button"
-          @click="() => (!user ? signInWithFacebook() : signOut())"
-          class="flex items-center gap-3 p-2 rounded-md c-border"
-        >
-          <span
-            class="inline-flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full"
-          >
+        <button type="button" @click="() => (!user ? signInWithFacebook() : signOut())"
+          class="flex items-center gap-3 p-2 rounded-md c-border">
+          <span class="inline-flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full">
             <i v-if="!user" class="fas fa-user" />
             <img v-else :src="avatarUrl" alt="facebook-avatar-url" class="rounded-full" />
           </span>
           {{ user ? userName : "Login" }}
-          <i class="fas fa-chevron-down" />
+          <i v-if="!user" class="fas fa-chevron-down" />
         </button>
       </div>
     </div>
@@ -70,25 +64,20 @@ const isUserLoggedIn = reactive({
 });
 
 async function signInWithFacebook() {
-  console.log("signing in with facebook");
   const { data, error } = await client.auth.signInWithOAuth({
     provider: "facebook",
   });
 }
-async function signOut() {
-  console.log("signing out");
-  const { error } = await client.auth.signOut();
+function signOut() {
+  client.auth.signOut()
+    .then(() => {
+      user.value = null;
+    })
+    .catch(console.log);
 }
 
 const user = useSupabaseUser();
 
-watchEffect(() => {
-  if (user.value) {
-    isUserLoggedIn.value = true;
-  } else {
-    isUserLoggedIn.value = false;
-  }
-});
 
 const avatarUrl = computed(() => user.value?.user_metadata.avatar_url);
 const userName = computed(() => user.value?.user_metadata.name);
